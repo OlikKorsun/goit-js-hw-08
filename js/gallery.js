@@ -64,14 +64,60 @@ const images = [
   },
 ];
 
+const galleryImg = document.querySelector(".gallery");
 
-// li class="gallery-item">
-//   <a class="gallery-link" href="large-image.jpg">
-//     <img
-//       class="gallery-image"
-//       src="small-image.jpg"
-//       data-source="large-image.jpg"
-//       alt="Image description"
-//     />
-//   </a>
-// </li
+const htmlListOfGallery = [];
+
+for (let i = 0; i < images.length; i++) {
+    // console.log(i);
+    // console.log(images.length);
+    htmlListOfGallery.push(`<li class="gallery-item">
+            <a class="gallery-link" href="${images[i].original}">
+            <img class="gallery-image"
+                src="${images[i].preview}"
+                data-source="${images[i].original}"
+                alt="${images[i].description}"/>
+                </li>`);
+    // console.log(htmlListOfGallery);
+}
+
+galleryImg.insertAdjacentHTML("afterbegin", htmlListOfGallery.join(""));
+
+const galleryLink = document.querySelector(".gallery-link");
+
+// function stopDownLoadImage(event) {
+//     event.preventDefault();
+// }
+
+// galleryLink.addEventListener("click", stopDownLoadImage);
+
+function getLinkOnImage(event) {
+    event.preventDefault();
+
+    // console.log("haha");
+    // console.log(event.target);
+    // console.log(event.currentTarget);
+    if (event.target.nodeName === "IMG") {
+        // console.log(event.target.dataset.source);
+        basicLightbox.create(`
+    <img src="${event.target.dataset.source}" width="800" height="600">
+`).show();
+    }
+
+    // if (getEsc === "Escape") {
+    //     console.log("Hihi");
+    //     showBigFoto.close();
+    // }
+    }
+
+galleryImg.addEventListener("click", getLinkOnImage);
+
+function getEsc(event) {
+    if (event.code === "Escape") {
+        console.log("Hihi");
+        basicLightbox.close();
+    }
+}
+    
+document.addEventListener("keydown", getEsc);
+
