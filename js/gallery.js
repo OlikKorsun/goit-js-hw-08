@@ -65,59 +65,39 @@ const images = [
 ];
 
 const galleryImg = document.querySelector(".gallery");
-
+const galleryLink = document.querySelector(".gallery-link");
 const htmlListOfGallery = [];
+let modalImg;
 
 for (let i = 0; i < images.length; i++) {
-    // console.log(i);
-    // console.log(images.length);
-    htmlListOfGallery.push(`<li class="gallery-item">
+htmlListOfGallery.push(`<li class="gallery-item">
             <a class="gallery-link" href="${images[i].original}">
             <img class="gallery-image"
                 src="${images[i].preview}"
                 data-source="${images[i].original}"
                 alt="${images[i].description}"/>
                 </li>`);
-    // console.log(htmlListOfGallery);
 }
-
 galleryImg.insertAdjacentHTML("afterbegin", htmlListOfGallery.join(""));
-
-const galleryLink = document.querySelector(".gallery-link");
-
-// function stopDownLoadImage(event) {
-//     event.preventDefault();
-// }
-
-// galleryLink.addEventListener("click", stopDownLoadImage);
 
 function getLinkOnImage(event) {
     event.preventDefault();
-
-    // console.log("haha");
-    // console.log(event.target);
-    // console.log(event.currentTarget);
-    if (event.target.nodeName === "IMG") {
-        // console.log(event.target.dataset.source);
-        basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`).show();
+    if (event.target === event.currentTarget) {
+        return
     }
-
-    // if (getEsc === "Escape") {
-    //     console.log("Hihi");
-    //     showBigFoto.close();
-    // }
-    }
+    modalImg = basicLightbox.create(`
+    <img src="${event.target.dataset.source}" width="800" height="600">`);
+    modalImg.show();
+}
+    
 
 galleryImg.addEventListener("click", getLinkOnImage);
 
 function getEsc(event) {
-    if (event.code === "Escape") {
-        console.log("Hihi");
-        basicLightbox.close();
+    if (event.code === "Escape" && modalImg) {
+        modalImg.close();
+        document.removeEventListener("keyup", getEsc);
     }
 }
     
 document.addEventListener("keydown", getEsc);
-
